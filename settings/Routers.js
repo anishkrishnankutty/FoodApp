@@ -4,6 +4,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Register from "../screens/Register";
 import Login from "../screens/Login";
 import ForgotPassword from "../screens/ForgotPassword";
+import Home from "../screens/Home";
 
 const AppNavigator = createStackNavigator({
     Register: {
@@ -14,6 +15,9 @@ const AppNavigator = createStackNavigator({
     },
     ForgotPassword: {
         screen: ForgotPassword
+    },
+    Home: {
+        screen: Home
     }
 },
 {

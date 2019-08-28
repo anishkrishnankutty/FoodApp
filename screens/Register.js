@@ -43,7 +43,9 @@ export default class Register extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text> Register Screen</Text>
+        <Text> Register Screen
+
+        </Text>
         <View style={styles.formContainer}>
             <TextInput style={styles.input} placeholder="Email Address" onChangeText={(text)=>this.setState({email:text})} />
         </View>
@@ -60,6 +62,11 @@ export default class Register extends Component {
         <TouchableOpacity onPress={()=>this.props.navigation.navigate('Login')}>
             <View style={styles.loginButton}>
                 <Text>Go To Login Screen</Text>
+            </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>this.props.navigation.navigate('ForgotPassword')}>
+            <View style={styles.loginButton}>
+                <Text>Forgot Password</Text>
             </View>
         </TouchableOpacity>
       </View>

@@ -4,4 +4,4 @@
 ### Run expo init AppName
 ### cd AppName
 ### npm install --save firebase
-### expo start
+### expo start 
