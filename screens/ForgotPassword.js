@@ -1,14 +1,17 @@
+
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, Image, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase';
 
 export default class ForgotPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        email: "",
+      email: "",
+      password: ""
     };
   }
+
 
   forgotpassword() {
     firebase.auth().sendPasswordResetEmail(this.state.email).then(()=>{
@@ -35,49 +38,149 @@ export default class ForgotPassword extends Component {
 
   }
 
+
   render() {
+
     return (
       <View style={styles.container}>
-        <Text> Forgot Password
+     <ImageBackground source={{uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg'}} style={{width: '100%', height: '100%'}}>
+    
 
-        </Text>
+     <View >
+    
+        </View>
+
+        <View >
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        
+        <Text></Text>
+        <Text></Text>
+        <Text style={styles.textStyle}> Password Reset</Text>
+        <Text></Text>
+       
+    </View>
+   
+        
         <View style={styles.formContainer}>
             <TextInput style={styles.input} placeholder="Email Address" onChangeText={(text)=>this.setState({email:text})} />
         </View>
-  
-        <View style={styles.formContainer}>
+   
+        <View >
+       
+       
+       
+       
+    </View>
+        <View>
             <TouchableOpacity onPress={()=>this.forgotpassword()}>
-                <View style={styles.registerButton}>
-                    <Text>Forgot Password</Text>
+                <View >
+                    <Text style={styles.registerButton} >Get Reset Link</Text>
                 </View>
             </TouchableOpacity>
         </View>
+       
+        <View >
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
       
+      
+       
+    </View>
+ 
+        </ImageBackground>
+       
       </View>
+
+
+
     );
   }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#FFFFFF"
-    },
-    formContainer: {
-        width: "100%",
-    },
-    input: {
-        fontSize: 14,
-        padding: 10
-    },
-    registerButton: {
-        width: "100%",
-        padding: 10,
-        backgroundColor: "#FF0000"
-    },
-    loginButton: {
-        width: "100%",
-        padding: 10,
-        backgroundColor: "#CCC"
+  container: {
+      flex: 1,
+      backgroundColor: "#CCC",
+      height: 100,
+     
+      
+  },
+  formContainer: {
+      width: "100%",
+       textAlign:'center',
+     
+      borderWidth: 1,
+    borderRadius: 12
+  },
+  input: {
+    backgroundColor: '#FFFFFF',
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 12,
+    color: 'black',
+    fontSize: 20,
+  
+    overflow: 'hidden',
+    padding: 10,
+    textAlign:'left',
+  },
+  registerButton: {
+    backgroundColor: '#008080',
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 12,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    overflow: 'hidden',
+    padding: 12,
+    textAlign:'center',
+   
+  },
+
+  textStyle: {
+   
+   
+  
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    overflow: 'hidden',
+    padding: 12,
+    textAlign:'center',
+   
+  },
+
+  loginButton: {
+    backgroundColor: '#C0C0C0',
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 12,
+    color: 'black',
+    fontSize: 14,
+    
+    overflow: 'hidden',
+    padding: 12,
+    textAlign:'center',
+},
+
+
+  backgroundImage: {
+    flex: 1,
+    width: null,
+    height: null,
     }
+
 })
