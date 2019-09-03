@@ -82,7 +82,7 @@ export default class Login extends Component {
         <Text></Text>
         <Text></Text>
         <Text style={styles.textStyle}> Sign in to Food App</Text>
-        <Text></Text>
+        
        
     </View>
    
@@ -91,7 +91,7 @@ export default class Login extends Component {
             <TextInput style={styles.input} placeholder="Email Address" onChangeText={(text)=>this.setState({email:text})} />
         </View>
         <View style={styles.formContainer}>
-            <TextInput style={styles.input} placeholder="Password" onChangeText={(text)=>this.setState({password:text})} />
+            <TextInput  secureTextEntry={true} style={styles.input} placeholder="Password" onChangeText={(text)=>this.setState({password:text})} />
         </View>
         <View >
        

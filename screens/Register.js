@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, Image, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,Picker, ImageBackground, Image, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase';
+import RNPickerSelect from 'react-native-picker-select';
 
 export default class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      name: "",
+      password: "",
+      contact: "",
+      userid: ""
     };
+    this.ref = firebase.firestore().collection('users');
   }
+
+
 
 
   register() {
@@ -19,10 +26,38 @@ export default class Register extends Component {
       ).then(
         (response) => {
             console.log(response);
+
+            Alert.alert( firebase.auth().currentUser.uid);
+            this.setState({userid:firebase.auth().currentUser.uid});
+            this.ref.add({
+              name: this.state.name,
+              email: this.state.email,
+              userid:  this.state.userid,
+              contact: this.state.contact
+          }).then((data) => {
+              console.log(`added data = ${data}`);
+              this.setState({
+                 
+                  loading: true
+              });
+          });
+       
+
+
             firebase.auth().currentUser.sendEmailVerification().then(function() {
+
+      
+
               setTimeout(() => {
+                Alert.alert(firebase.auth().currentUser.uid);
+
+               
+
                 Alert.alert('You are succesfully registered. Please check your mailbox and verify your email address.');
               }, 1000);
+              
+            
+
             }).catch(function(error) {
               setTimeout(() => {
                 Alert.alert(error.message);
@@ -44,6 +79,20 @@ export default class Register extends Component {
 
   render() {
 
+    const placeholder = {
+      label: 'Select the NGO you belong to?',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const UserType = {
+      label: 'I want to register as a',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    
+   
     return (
       <View style={styles.container}>
      <ImageBackground source={{uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg'}} style={{width: '100%', height: '100%'}}>
@@ -73,16 +122,48 @@ export default class Register extends Component {
         <Text></Text>
        
     </View>
-   
+       
+    <View style={styles.pickerStyle} >
+        <RNPickerSelect placeholder={UserType}
+            onValueChange={(value) => console.log(value)}
+            items={[
+                { label: 'Volunteer', value: 'Volunteer' },
+                { label: 'Donor', value: 'Donor' },
+  
+            ]}
+        />
+      </View>
+       
         
+        <View style={styles.formContainer}>
+            <TextInput style={styles.input} placeholder="Name" onChangeText={(text)=>this.setState({name:text})} />
+        </View>
+
+
+   
+ 
+
         <View style={styles.formContainer}>
             <TextInput style={styles.input} placeholder="Email Address" onChangeText={(text)=>this.setState({email:text})} />
         </View>
         <View style={styles.formContainer}>
-            <TextInput style={styles.input} placeholder="Password" onChangeText={(text)=>this.setState({password:text})} />
+            <TextInput  secureTextEntry={true} style={styles.input} placeholder="Password" onChangeText={(text)=>this.setState({password:text})} />
+        </View>
+        <View style={styles.formContainer}>
+            <TextInput style={styles.input} placeholder="Contact Number" onChangeText={(text)=>this.setState({contact:text})} />
         </View>
         <View >
-       
+
+        <View style={styles.pickerStyle} >
+        <RNPickerSelect placeholder={placeholder}
+            onValueChange={(value) => console.log(value)}
+            items={[
+                { label: 'NGO 1', value: 'NGO1' },
+                { label: 'NGO 2', value: 'NGO2' },
+                { label: 'NGO 3', value: 'NGO3' },
+            ]}
+        />
+      </View>
        
        
        
@@ -171,8 +252,21 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
     textAlign:'center',
+    
    
   },
+  pickerStyle:{  
+    backgroundColor: '#FFFFFF',
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 12,
+    color: 'black',
+    fontSize: 20,
+   
+    overflow: 'hidden',
+    padding: 13,
+    textAlign:'left',  
+}  ,
 
   loginButton: {
     backgroundColor: '#C0C0C0',

@@ -5,6 +5,8 @@ import Register from "../screens/Register";
 import Login from "../screens/Login";
 import ForgotPassword from "../screens/ForgotPassword";
 import Home from "../screens/Home";
+import Data from "../screens/Data";
+
 
 const AppNavigator = createStackNavigator({
     Register: {
@@ -18,7 +20,11 @@ const AppNavigator = createStackNavigator({
     },
     Home: {
         screen: Home
-    }
+    },
+    Data: {
+        screen: Data
+    },
+ 
 },
 {
   initialRouteName: "Register"

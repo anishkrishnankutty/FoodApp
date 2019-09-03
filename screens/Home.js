@@ -7,47 +7,40 @@ export default class ForgotPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      email: "uu",
+      password: "tt"
     };
   }
 
 
-  forgotpassword() {
-    firebase.auth().sendPasswordResetEmail(this.state.email).then(()=>{
-      setTimeout(() => {
-        this.setState({
-          loading: false
-        },()=>{
-          setTimeout(() => {
-            Alert.alert('A mail has been sent to your email address');
-          }, 1000);
-        })
-      }, 2000);
-    }).catch((error)=>{
-      setTimeout(() => {
-        this.setState({
-          loading: false
-        },()=>{
-          setTimeout(() => {
-            Alert.alert(error.message);
-          }, 1000);
-        });
-      }, 2000);
-    });
-
-  }
-
 
   render() {
+   
+      var user = firebase.auth().currentUser;
+      var name, email, photoUrl, uid, emailVerified;
 
+      if (user != null) {
+        name = user.displayName;
+        email = user.email;
+      
+        photoUrl = user.photoURL;
+        emailVerified = user.emailVerified;
+        uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+                         // this value to authenticate with your backend server, if
+                         // you have one. Use User.getToken() instead.
+      }
+  
     return (
       <View style={styles.container}>
      <ImageBackground source={{uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg'}} style={{width: '100%', height: '100%'}}>
     
 
      <View >
-    
+     <TouchableOpacity onPress={()=>this.displayuser()}>
+                <View >
+                    <Text style={styles.registerButton} >Create your account</Text>
+                </View>
+            </TouchableOpacity>
         </View>
 
         <View >
@@ -67,8 +60,9 @@ export default class ForgotPassword extends Component {
         <Text></Text>
         <Text></Text>
         <Text style={styles.textStyle}> Welcome Home</Text>
-        <Text></Text>
+        <Text style={styles.textStyle}> {email}</Text>
        
+      
     </View>
    
         
@@ -82,7 +76,8 @@ export default class ForgotPassword extends Component {
 
     );
   }
-}
+  }
+
 
 const styles = StyleSheet.create({
   container: {
