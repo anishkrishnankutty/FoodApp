@@ -10,7 +10,10 @@ import Data from "../screens/Data";
 
 const AppNavigator = createStackNavigator({
     Register: {
-        screen: Register
+        screen: Register,
+        navigationOptions: {
+            header: null
+        }
     },
     Login: {
         screen: Login
