@@ -17,7 +17,15 @@ export default class Register extends Component {
     this.ref = firebase.firestore().collection('users');
   }
 
+  ShowHideComponent = () => {
+   
 
+    if (this.state.show == true) {
+      this.setState({ show: false });
+    } else {
+      this.setState({ show: true });
+    }
+  };
 
 
   register() {
@@ -81,7 +89,7 @@ export default class Register extends Component {
   render() {
 
     const placeholder = {
-      label: 'Select the NGO you belong to?',
+      label: 'Choose an NGO that you wish to work with?',
       value: null,
       color: '#9EA0A4',
     };
@@ -93,6 +101,7 @@ export default class Register extends Component {
     };
 
 
+    
 
     return (
       <View style={styles.container}>
@@ -102,7 +111,8 @@ export default class Register extends Component {
               <View style={styles.pickerStyle} >
                   <RNPickerSelect placeholder={UserType}
                     style={pickerSelectStyles}
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={this.ShowHideComponent}
+                    value={this.state.state}
                     items={[
                       { label: 'Volunteer', value: 'Volunteer' },
                       { label: 'Donor', value: 'Donor' },
@@ -110,6 +120,29 @@ export default class Register extends Component {
                     ]}
                   />
               </View>
+
+ 
+
+
+              {this.state.show ? (
+              <View style={styles.formContainer}>
+              <View style={styles.pickerStyle} >
+                <RNPickerSelect placeholder={placeholder}
+                  onValueChange={(value) => 
+                    console.log(value)
+                  }
+                  style={pickerSelectStyles}
+                  items={[
+                    { label: 'NGO 1 (Alleppy)', value: 'NGO1' },
+                    { label: 'NGO 2 (Trissur)', value: 'NGO2' },
+                    { label: 'NGO 3 (Wayanad)', value: 'NGO3' },
+                  ]}
+                />
+              </View>
+              </View>
+
+              ) : null}
+
               <View style={styles.formContainer}>
                 <TextInput style={styles.input} placeholder="Name" onChangeText={(text) => this.setState({ name: text })} />
               </View>
@@ -122,18 +155,7 @@ export default class Register extends Component {
               <View style={styles.formContainer}>
                 <TextInput style={styles.input} placeholder="Contact Number" onChangeText={(text) => this.setState({ contact: text })} />
               </View>
-              <View style={styles.pickerStyle} >
-                <RNPickerSelect placeholder={placeholder}
-                  onValueChange={(value) => console.log(value)}
-                  style={pickerSelectStyles}
-                  items={[
-                    { label: 'NGO 1', value: 'NGO1' },
-                    { label: 'NGO 2', value: 'NGO2' },
-                    { label: 'NGO 3', value: 'NGO3' },
-                  ]}
-                />
-              </View>
-              <View>
+              <View style={styles.formContainer}>
                 <TouchableOpacity onPress={() => this.register()}>
                   <View >
                     <Text style={styles.registerButton} >Create your account</Text>
