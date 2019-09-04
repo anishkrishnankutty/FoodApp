@@ -5,6 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { SafeAreaView } from 'react-navigation';
 
 export default class Register extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,15 +19,12 @@ export default class Register extends Component {
   }
 
   ShowHideComponent = () => {
-   
-
     if (this.state.show == true) {
       this.setState({ show: false });
     } else {
       this.setState({ show: true });
     }
   };
-
 
   register() {
     firebase.auth().createUserWithEmailAndPassword(
@@ -35,7 +33,6 @@ export default class Register extends Component {
     ).then(
       (response) => {
         console.log(response);
-
         Alert.alert(firebase.auth().currentUser.uid);
         this.setState({ userid: firebase.auth().currentUser.uid });
         this.ref.add({
@@ -46,27 +43,14 @@ export default class Register extends Component {
         }).then((data) => {
           console.log(`added data = ${data}`);
           this.setState({
-
             loading: true
           });
         });
-
-
-
         firebase.auth().currentUser.sendEmailVerification().then(function () {
-
-
-
           setTimeout(() => {
             Alert.alert(firebase.auth().currentUser.uid);
-
-
-
             Alert.alert('You are succesfully registered. Please check your mailbox and verify your email address.');
           }, 1000);
-
-
-
         }).catch(function (error) {
           setTimeout(() => {
             Alert.alert(error.message);
@@ -108,6 +92,9 @@ export default class Register extends Component {
         <SafeAreaView>
           <ImageBackground source={{ uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg' }} style={{ width: '100%', height: '100%' }}>
             <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
+              <View style={{ width: "100%" }}>
+                <Text style={styles.textStyle}>Sign up to Food App</Text>
+              </View>
               <View style={styles.pickerStyle} >
                   <RNPickerSelect placeholder={UserType}
                     style={pickerSelectStyles}
@@ -121,26 +108,22 @@ export default class Register extends Component {
                   />
               </View>
 
- 
-
-
               {this.state.show ? (
-              <View style={styles.formContainer}>
-              <View style={styles.pickerStyle} >
-                <RNPickerSelect placeholder={placeholder}
-                  onValueChange={(value) => 
-                    console.log(value)
-                  }
-                  style={pickerSelectStyles}
-                  items={[
-                    { label: 'NGO 1 (Alleppy)', value: 'NGO1' },
-                    { label: 'NGO 2 (Trissur)', value: 'NGO2' },
-                    { label: 'NGO 3 (Wayanad)', value: 'NGO3' },
-                  ]}
-                />
-              </View>
-              </View>
-
+                <View style={styles.formContainer}>
+                  <View style={styles.pickerStyle} >
+                    <RNPickerSelect placeholder={placeholder}
+                      onValueChange={(value) => 
+                        console.log(value)
+                      }
+                      style={pickerSelectStyles}
+                      items={[
+                        { label: 'NGO 1 (Alleppy)', value: 'NGO1' },
+                        { label: 'NGO 2 (Trissur)', value: 'NGO2' },
+                        { label: 'NGO 3 (Wayanad)', value: 'NGO3' },
+                      ]}
+                    />
+                  </View>
+                </View>
               ) : null}
 
               <View style={styles.formContainer}>
@@ -194,7 +177,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     color: 'black',
     fontSize: 20,
-
     overflow: 'hidden',
     padding: 10,
     textAlign: 'left',
@@ -210,21 +192,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
     textAlign: 'center',
-
   },
-
   textStyle: {
-
-
-
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     overflow: 'hidden',
     padding: 12,
     textAlign: 'center',
-
-
   },
   pickerStyle: {
     backgroundColor: '#FFFFFF',
@@ -238,7 +213,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   loginButton: {
-
     backgroundColor: '#C0C0C0',
     borderColor: 'white',
     borderWidth: 1,
@@ -248,16 +222,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
     textAlign: 'center',
-
   },
   backgroundImage: {
-
     flex: 1,
     width: null,
     height: null,
-
   },
-
 })
 
 const pickerSelectStyles = StyleSheet.create({
