@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, Image, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase';
+import { SafeAreaView } from 'react-navigation';
 
 export default class ForgotPassword extends Component {
   constructor(props) {
@@ -40,88 +41,42 @@ export default class ForgotPassword extends Component {
 
 
   render() {
-
     return (
       <View style={styles.container}>
-     <ImageBackground source={{uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg'}} style={{width: '100%', height: '100%'}}>
-    
-
-     <View >
-    
-        </View>
-
-        <View >
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        
-        <Text></Text>
-        <Text></Text>
-        <Text style={styles.textStyle}> Password Reset</Text>
-        <Text></Text>
-       
-    </View>
-   
-        
-        <View style={styles.formContainer}>
-            <TextInput style={styles.input} placeholder="Email Address" onChangeText={(text)=>this.setState({email:text})} />
-        </View>
-   
-        <View >
-       
-       
-       
-       
-    </View>
-        <View>
-            <TouchableOpacity onPress={()=>this.forgotpassword()}>
-                <View >
-                    <Text style={styles.registerButton} >Get Reset Link</Text>
-                </View>
-            </TouchableOpacity>
-        </View>
-       
-        <View >
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-      
-      
-       
-    </View>
- 
-        </ImageBackground>
-       
+        <SafeAreaView>
+          <ImageBackground source={{uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg'}} style={{width: '100%', height: '100%'}}>
+            <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
+              <View style={{ width: "100%" }}>
+                <Text style={styles.textStyle}>Password Reset</Text>
+              </View>
+              <View style={styles.formContainer}>
+                  <TextInput style={styles.input} placeholder="Email Address" onChangeText={(text)=>this.setState({email:text})} />
+              </View>
+              <View style={{ width: "100%" }}>
+                <TouchableOpacity onPress={()=>this.forgotpassword()}>
+                  <View >
+                      <Text style={styles.registerButton} >Get Reset Link</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ImageBackground>
+        </SafeAreaView>
       </View>
-
-
-
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: "#CCC",
-      height: 100,
-     
-      
+    flex: 1,
+    backgroundColor: "#CCC",
+    height: 100,
   },
   formContainer: {
-      width: "100%",
-       textAlign:'center',
-     
-      borderWidth: 1,
+    width: "100%",
+    textAlign:'center',
+    borderWidth: 1,
     borderRadius: 12
   },
   input: {
@@ -131,7 +86,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     color: 'black',
     fontSize: 20,
-  
     overflow: 'hidden',
     padding: 10,
     textAlign:'left',
@@ -147,22 +101,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
     textAlign:'center',
-   
   },
-
   textStyle: {
-   
-   
-  
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     overflow: 'hidden',
     padding: 12,
     textAlign:'center',
-   
   },
-
   loginButton: {
     backgroundColor: '#C0C0C0',
     borderColor: 'white',
@@ -170,17 +117,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     color: 'black',
     fontSize: 14,
-    
     overflow: 'hidden',
     padding: 12,
     textAlign:'center',
-},
-
-
+  },
   backgroundImage: {
     flex: 1,
     width: null,
     height: null,
-    }
-
+  }
 })

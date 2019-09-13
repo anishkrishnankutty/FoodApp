@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { Font } from 'expo';
 import Router from './settings/Routers';
-import * as firebase from 'firebase';
+import { isSignedIn, hasSkipped } from './settings/Storage';
+import { AppLoading } from 'expo';
 
+// begin firebase
+import * as firebase from 'firebase';
 const firebaseConfig = {
   apiKey: "AIzaSyC15_R6EXK0cCt0s5aPj6YVoVlTXTH_yFc",
   authDomain: "foodapp-972b5.firebaseapp.com",
@@ -14,26 +17,35 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+// end firebase
 
-export default class App extends Component {
+export default class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-    }
+      signedIn: false,
+      fontLoaded: true
+    };
+  }
+
+  async componentDidMount() {
+    this.setState({ fontLoaded: true },()=>{
+      isSignedIn()
+        .then((res) => {
+          console.log(res);
+          if(res) {
+            this.setState({ signedIn: res})
+          }else{
+            this.setState({ signedIn: false})
+          }
+        }).catch(err => alert(err.message));
+    });
   }
 
   render() {
+    
     return <Router />;
+    
   }
-
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
