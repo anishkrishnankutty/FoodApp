@@ -1,36 +1,82 @@
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import * as React from 'react';
 
-// Screens
-import Register from "../screens/Register";
-import Login from "../screens/Login";
-import ForgotPassword from "../screens/ForgotPassword";
-import Home from "../screens/Home";
-import Data from "../screens/Data";
+import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
 
+import {
+  createStackNavigator,
+  createAppContainer,
+  createBottomTabNavigator,
+  createSwitchNavigator,
+} from 'react-navigation';
 
-const AppNavigator = createStackNavigator({
+import {
+  Feather,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Entypo,
+} from '@expo/vector-icons';
+
+/////////////////
+// screens
+/////////////////
+import Register from '../screens/Register';
+import Login from '../screens/Login';
+import ForgotPassword from '../screens/ForgotPassword';
+import Profile from '../screens/Profile';
+
+/////////////////
+// root Navigation
+/////////////////
+export const RootAppContainer = (signedIn = false) => {
+  const rootnavigation = createSwitchNavigator(
+    {
+      SignedIn: {
+        screen: SignInAppContainer,
+      },
+      SignedOut: {
+        screen: SignedOutAppContainer,
+      },
+    },
+    {
+      initialRouteName: signedIn ? 'SignedIn' : 'SignedOut',
+    }
+  );
+  return createAppContainer(rootnavigation);
+};
+
+/////////////////
+// Auth Navigation
+/////////////////
+const signedOutNavigation = createStackNavigator(
+  {
     Register: {
-        screen: Register,
-        navigationOptions: {
-            header: null
-        }
+      screen: Register,
     },
     Login: {
-        screen: Login
+      screen: Login,
     },
     ForgotPassword: {
-        screen: ForgotPassword
+      screen: ForgotPassword,
     },
-    Home: {
-        screen: Home
+  },
+  {
+    initialRouteName: 'Register',
+  }
+);
+/////////////////
+// InApp Navigation
+/////////////////
+const signedInNavigation = createStackNavigator(
+  {
+    Profile: {
+      screen: Profile,
     },
-    Data: {
-        screen: Data
-    },
- 
-},
-{
-  initialRouteName: "Register"
-});
+  },
+  {
+    initialRouteName: 'Profile'
+  }
+);
 
-export default createAppContainer(AppNavigator);
+export const SignedOutAppContainer = createAppContainer(signedOutNavigation);
+export const SignInAppContainer = createAppContainer(signedInNavigation);
+export default createAppContainer(signedOutNavigation);

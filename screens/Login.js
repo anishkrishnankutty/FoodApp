@@ -27,17 +27,14 @@ export default class Login extends Component {
             this.props.navigation.navigate('Home')
           })
         }else{
-          this.setState({
-            loading: false
-          },()=>{
-            firebase.auth().currentUser.sendEmailVerification().then(function() {
-              Alert.alert('Your email address has not been verified. We have just sent you the verification email again.')
-            }).catch(function(error) {
-              setTimeout(() => {
-                Alert.alert(error.message);
-              }, 1000);
-            });
-          })
+          Alert.alert('Your email address has not been verified. We have just sent you the verification email again.')
+          // firebase.auth().currentUser.sendEmailVerification().then(function() {
+          //   Alert.alert('Your email address has not been verified. We have just sent you the verification email again.')
+          // }).catch(function(error) {
+          //   setTimeout(() => {
+          //     Alert.alert(error.message);
+          //   }, 1000);
+          // });
         }
       }, 
       (error) => {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Picker, ImageBackground, Image, TextInput, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Picker, ImageBackground, Image, TextInput, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import * as firebase from 'firebase';
+import "firebase/firestore";
 import RNPickerSelect from 'react-native-picker-select';
 import { SafeAreaView } from 'react-navigation';
 
@@ -13,9 +14,14 @@ export default class Register extends Component {
       name: "",
       password: "",
       contact: "",
-      userid: ""
+      userid: "",
+      userType: "",
+      volunteer: false,
+      ngoId: "",
+      ngoName: "",
+      loadingNgos: false,
+      firestoreNGOs: []
     };
-    this.ref = firebase.firestore().collection('users');
   }
 
   ShowHideComponent = () => {
@@ -32,23 +38,20 @@ export default class Register extends Component {
       this.state.password
     ).then(
       (response) => {
-        console.log(response);
-        Alert.alert(firebase.auth().currentUser.uid);
-        this.setState({ userid: firebase.auth().currentUser.uid });
-        this.ref.add({
-          name: this.state.name,
-          email: this.state.email,
-          userid: this.state.userid,
-          contact: this.state.contact
-        }).then((data) => {
-          console.log(`added data = ${data}`);
-          this.setState({
-            loading: true
-          });
-        });
-        firebase.auth().currentUser.sendEmailVerification().then(function () {
+        let currentUser = firebase.auth().currentUser;
+        let databaseUsers = firebase.firestore().collection('users');
+        currentUser.sendEmailVerification().then(() => {
+          databaseUsers.doc(currentUser.uid).set({
+            name: this.state.name,
+            email: this.state.email,
+            userid: currentUser.uid,
+            contact: this.state.contact,
+            usertype: this.state.userType,
+            volunteer: this.state.volunteer,
+            ngoid: this.state.ngoId,
+            ngoname: this.state.ngoName,
+          })
           setTimeout(() => {
-            Alert.alert(firebase.auth().currentUser.uid);
             Alert.alert('You are succesfully registered. Please check your mailbox and verify your email address.');
           }, 1000);
         }).catch(function (error) {
@@ -56,21 +59,85 @@ export default class Register extends Component {
             Alert.alert(error.message);
           }, 1000);
         });
+
       },
       (error) => {
-        this.setState({
-          loading: false
-        }, () => {
-          setTimeout(() => {
-            Alert.alert(error.message);
-          }, 1000);
-        })
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 1000);
       }
     );
   }
 
+  onPickerChangeUser(text) {
+    try {
+      this.setState({
+        userType: text
+      },()=>{
+        if(text == "Volunteer") {
+          this.setState({ 
+            show: true, 
+            volunteer: true, 
+          },()=>{
+            this.getNGO();
+          });
+        }else{
+          this.setState({ 
+            show: false, 
+            volunteer: false, 
+            ngoId: '', 
+            ngoName: '' 
+          });
+        }
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  onPickerChangeNGO(text, index) {
+    try {
+      this.setState({
+        ngoId: text,
+        ngoName: this.state.firestoreNGOs[index].label,
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  async getNGO() {
+    try {
+      this.setState({
+        loadingNgos: true 
+      })
+      let array = [];
+      let data = await firebase.firestore().collection('ngo');
+      data = data.get();
+      data.then((response)=>{
+        response.docs.map((doc)=>{
+          let createObject = {
+            label: doc.data().name,
+            value: doc.id
+          };
+          array.push(createObject);
+        })
+        this.setState({
+          firestoreNGOs: array
+        },()=>{
+          this.setState({
+            loadingNgos: false 
+          })
+        })
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
 
   render() {
+
+    let pickerNGOS;
 
     const placeholder = {
       label: 'Choose an NGO that you wish to work with?',
@@ -84,8 +151,29 @@ export default class Register extends Component {
       color: '#9EA0A4',
     };
 
-
-    
+    if(this.state.loadingNgos){
+      pickerNGOS = (
+        <View style={styles.formContainer}>
+          <View>
+            <ActivityIndicator />
+          </View>
+        </View>
+      )
+    }else{
+      if(this.state.firestoreNGOs.length > 0){
+        pickerNGOS = (
+          <View style={styles.formContainer}>
+              <View style={styles.pickerStyle} >
+                <RNPickerSelect placeholder={placeholder}
+                  onValueChange={(text, index)=>this.onPickerChangeNGO(text, index)}
+                  style={pickerSelectStyles}
+                  items={this.state.firestoreNGOs}
+                />
+            </View>
+          </View>
+        )
+      }
+    }
 
     return (
       <View style={styles.container}>
@@ -98,7 +186,7 @@ export default class Register extends Component {
               <View style={styles.pickerStyle} >
                   <RNPickerSelect placeholder={UserType}
                     style={pickerSelectStyles}
-                    onValueChange={this.ShowHideComponent}
+                    onValueChange={(text)=>this.onPickerChangeUser(text)}
                     value={this.state.state}
                     items={[
                       { label: 'Volunteer', value: 'Volunteer' },
@@ -109,21 +197,7 @@ export default class Register extends Component {
               </View>
 
               {this.state.show ? (
-                <View style={styles.formContainer}>
-                  <View style={styles.pickerStyle} >
-                    <RNPickerSelect placeholder={placeholder}
-                      onValueChange={(value) => 
-                        console.log(value)
-                      }
-                      style={pickerSelectStyles}
-                      items={[
-                        { label: 'NGO 1 (Alleppy)', value: 'NGO1' },
-                        { label: 'NGO 2 (Trissur)', value: 'NGO2' },
-                        { label: 'NGO 3 (Wayanad)', value: 'NGO3' },
-                      ]}
-                    />
-                  </View>
-                </View>
+                pickerNGOS
               ) : null}
 
               <View style={styles.formContainer}>
