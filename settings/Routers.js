@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
-
 import {
   createStackNavigator,
   createAppContainer,
@@ -29,17 +27,23 @@ import Profile from '../screens/Profile';
 /////////////////
 export const RootAppContainer = (signedIn = false) => {
   const rootnavigation = createSwitchNavigator(
-    {
-      SignedIn: {
-        screen: SignInAppContainer,
+      {
+          SignedIn: {
+              screen: SignInAppContainer,
+              navigationOptions: {
+                header: null,
+              },
+          },
+          SignedOut: {
+              screen: SignedOutAppContainer,
+              navigationOptions: {
+                header: null,
+              },
+          },
       },
-      SignedOut: {
-        screen: SignedOutAppContainer,
-      },
-    },
-    {
-      initialRouteName: signedIn ? 'SignedIn' : 'SignedOut',
-    }
+      {
+          initialRouteName: signedIn ? 'SignedIn' : 'SignedOut',
+      }
   );
   return createAppContainer(rootnavigation);
 };
@@ -79,4 +83,3 @@ const signedInNavigation = createStackNavigator(
 
 export const SignedOutAppContainer = createAppContainer(signedOutNavigation);
 export const SignInAppContainer = createAppContainer(signedInNavigation);
-export default createAppContainer(signedOutNavigation);

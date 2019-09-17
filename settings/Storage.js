@@ -10,7 +10,6 @@ export const onSignIn = async data => {
     try {
         AsyncStorage.clear();
         try {
-            let location = await getPosition();
             await AsyncStorage.setItem(USER_KEY, JSON.stringify(data));
         } catch (error) {
             console.log(error);

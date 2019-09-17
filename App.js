@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Font } from 'expo';
-import Router from './settings/Routers';
-import { isSignedIn, hasSkipped } from './settings/Storage';
-import { AppLoading } from 'expo';
+import { View, Text } from 'react-native';
+import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 // begin firebase
 import * as firebase from 'firebase';
+import { AuthLoadingScreen } from './screens/AuthLoading';
 const firebaseConfig = {
   apiKey: "AIzaSyC15_R6EXK0cCt0s5aPj6YVoVlTXTH_yFc",
   authDomain: "foodapp-972b5.firebaseapp.com",
@@ -19,33 +18,69 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 // end firebase
 
-export default class App extends React.Component {
+/////////////////
+// screens
+/////////////////
+import Register from './screens/Register';
+import Login from './screens/Login';
+import ForgotPassword from './screens/ForgotPassword';
+import Profile from './screens/Profile';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      signedIn: false,
-      fontLoaded: true
-    };
+/////////////////
+// Auth Navigation
+/////////////////
+export const signedOutNavigation = createStackNavigator(
+  {
+    Register: {
+      screen: Register,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    ForgotPassword: {
+      screen: ForgotPassword,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Register',
   }
+);
+/////////////////
+// InApp Navigation
+/////////////////
+export const signedInNavigation = createStackNavigator(
+  {
+    Profile: {
+      screen: Profile,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Profile'
+  }
+);
 
-  async componentDidMount() {
-    this.setState({ fontLoaded: true },()=>{
-      isSignedIn()
-        .then((res) => {
-          console.log(res);
-          if(res) {
-            this.setState({ signedIn: res})
-          }else{
-            this.setState({ signedIn: false})
-          }
-        }).catch(err => alert(err.message));
-    });
-  }
+const AppStack = signedInNavigation;
+const AuthStack = signedOutNavigation;
 
-  render() {
-    
-    return <Router />;
-    
+export default createAppContainer(createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
   }
-}
+));
