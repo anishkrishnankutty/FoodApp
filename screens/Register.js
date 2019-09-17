@@ -19,9 +19,21 @@ export default class Register extends Component {
       volunteer: false,
       ngoId: "",
       ngoName: "",
+      location: "",
+      loading: true,
       loadingNgos: false,
-      firestoreNGOs: []
+      firestoreNGOs: [],
+      firestoreLocations: [],
     };
+  }
+
+  componentDidMount() {
+    this.load();
+  }
+
+  async load() {
+    this.getNGO();
+    this.getLocation();
   }
 
   ShowHideComponent = () => {
@@ -50,6 +62,7 @@ export default class Register extends Component {
             volunteer: this.state.volunteer,
             ngoid: this.state.ngoId,
             ngoname: this.state.ngoName,
+            location: this.state.location,
           })
           setTimeout(() => {
             Alert.alert('You are succesfully registered. Please check your mailbox and verify your email address.');
@@ -78,8 +91,6 @@ export default class Register extends Component {
           this.setState({ 
             show: true, 
             volunteer: true, 
-          },()=>{
-            this.getNGO();
           });
         }else{
           this.setState({ 
@@ -106,11 +117,19 @@ export default class Register extends Component {
     }
   }
 
+  onPickerChangeLocation(text, index) {
+    try {
+      let createString = "/locations/" + this.state.firestoreLocations[index].value;
+      this.setState({
+        location: createString,
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
   async getNGO() {
     try {
-      this.setState({
-        loadingNgos: true 
-      })
       let array = [];
       let data = await firebase.firestore().collection('ngo');
       data = data.get();
@@ -124,9 +143,32 @@ export default class Register extends Component {
         })
         this.setState({
           firestoreNGOs: array
+        })
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  async getLocation() {
+    try {
+      let array = [];
+      let data = await firebase.firestore().collection('locations');
+      data = data.get();
+      data.then((response)=>{
+        response.docs.map((doc)=>{
+          let createString = doc.data().state + " | " + doc.data().district
+          let createObject = {
+            label: createString,
+            value: doc.id
+          };
+          array.push(createObject);
+        })
+        this.setState({
+          firestoreLocations: array
         },()=>{
           this.setState({
-            loadingNgos: false 
+            loading: false 
           })
         })
       })
@@ -138,6 +180,13 @@ export default class Register extends Component {
   render() {
 
     let pickerNGOS;
+    let pickerLocations;
+
+    const placeholderLocation = {
+      label: 'Choose your state and district',
+      value: null,
+      color: '#9EA0A4',
+    };
 
     const placeholder = {
       label: 'Choose an NGO that you wish to work with?',
@@ -150,6 +199,14 @@ export default class Register extends Component {
       value: null,
       color: '#9EA0A4',
     };
+
+    if(this.state.loading) {
+      return (
+        <View style={{  flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
 
     if(this.state.loadingNgos){
       pickerNGOS = (
@@ -173,6 +230,20 @@ export default class Register extends Component {
           </View>
         )
       }
+    }
+
+    if(this.state.firestoreLocations.length > 0){
+      pickerLocations = (
+        <View style={styles.formContainer}>
+            <View style={styles.pickerStyle} >
+              <RNPickerSelect placeholder={placeholderLocation}
+                onValueChange={(text, index)=>this.onPickerChangeLocation(text, index)}
+                style={pickerSelectStyles}
+                items={this.state.firestoreLocations}
+              />
+          </View>
+        </View>
+      )
     }
 
     return (
@@ -199,6 +270,8 @@ export default class Register extends Component {
               {this.state.show ? (
                 pickerNGOS
               ) : null}
+
+              {pickerLocations}
 
               <View style={styles.formContainer}>
                 <TextInput style={styles.input} placeholder="Name" onChangeText={(text) => this.setState({ name: text })} />

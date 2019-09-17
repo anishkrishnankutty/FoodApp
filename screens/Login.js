@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, Image, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import { onSignIn } from '../settings/Storage';
 import * as firebase from 'firebase';
 
 export default class Login extends Component {
@@ -14,27 +15,30 @@ export default class Login extends Component {
   }
 
   login(){
+    const { navigate } = this.props.navigation;
     firebase.auth().signInWithEmailAndPassword(
       this.state.email, 
       this.state.password
     ).then(
       (details) => {
         if(details.user.emailVerified === true) {
-          this.setState({
-            uid: details.user.uid,
-            loading: false
-          },()=>{
-            this.props.navigation.navigate('Home')
-          })
+          onSignIn({
+            email: this.state.email,
+            password: this.state.password,
+            uid: details.user.uid
+          }).then(() => {        
+            setTimeout(()=>{
+              navigate('App');
+            }, 1000);
+          });
         }else{
-          Alert.alert('Your email address has not been verified. We have just sent you the verification email again.')
-          // firebase.auth().currentUser.sendEmailVerification().then(function() {
-          //   Alert.alert('Your email address has not been verified. We have just sent you the verification email again.')
-          // }).catch(function(error) {
-          //   setTimeout(() => {
-          //     Alert.alert(error.message);
-          //   }, 1000);
-          // });
+          firebase.auth().currentUser.sendEmailVerification().then(function() {
+            Alert.alert('Your email address has not been verified. We have just sent you the verification email again.')
+          }).catch(function(error) {
+            setTimeout(() => {
+              Alert.alert(error.message);
+            }, 1000);
+          });
         }
       }, 
       (error) => {
