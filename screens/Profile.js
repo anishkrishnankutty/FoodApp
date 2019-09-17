@@ -163,7 +163,7 @@ export default class Profile extends Component {
     if(this.state.locationDistrict){
       locationDistrict = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ marginRight: 10, }}>Distric:</Text>
+          <Text style={{ marginRight: 10, }}>District:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.locationDistrict}</Text>
         </View>
       )
