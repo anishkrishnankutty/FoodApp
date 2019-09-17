@@ -252,7 +252,7 @@ export default class Register extends Component {
           <ImageBackground source={{ uri: 'https://foodappbuckets.s3.us-east-2.amazonaws.com/app.jpg' }} style={{ width: '100%', height: '100%' }}>
             <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
               <View style={{ width: "100%" }}>
-                <Text style={styles.textStyle}>Sign up to Food App</Text>
+                <Text style={styles.textStyle}>Sign up to Food Bags</Text>
               </View>
               <View style={styles.pickerStyle} >
                   <RNPickerSelect placeholder={UserType}
