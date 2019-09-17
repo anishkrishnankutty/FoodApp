@@ -82,7 +82,7 @@ export default class Profile extends Component {
     if(this.state.userData.name){
       name = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>Name:</Text>
+          <Text style={{ marginRight: 10, }}>Name:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.name}</Text>
         </View>
       )
@@ -91,7 +91,7 @@ export default class Profile extends Component {
     if(this.state.userData.email){
       email = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>Email:</Text>
+          <Text style={{ marginRight: 10, }}>Email:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.email}</Text>
         </View>
       )
@@ -100,7 +100,7 @@ export default class Profile extends Component {
     if(this.state.userData.contact){
       contact = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>Contact:</Text>
+          <Text style={{ marginRight: 10, }}>Contact:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.contact}</Text>
         </View>
       )
@@ -109,7 +109,7 @@ export default class Profile extends Component {
     if(this.state.userData.ngoid){
       ngoId = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>NGO ID:</Text>
+          <Text style={{ marginRight: 10, }}>NGO ID:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.ngoid}</Text>
         </View>
       )
@@ -118,7 +118,7 @@ export default class Profile extends Component {
     if(this.state.userData.ngoname){
       ngoName = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>NGO NAME:</Text>
+          <Text style={{ marginRight: 10, }}>NGO NAME:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.ngoname}</Text>
         </View>
       )
@@ -127,7 +127,7 @@ export default class Profile extends Component {
     if(this.state.userData.userid){
       userId = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>User ID:</Text>
+          <Text style={{ marginRight: 10, }}>User ID:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.userid}</Text>
         </View>
       )
@@ -136,7 +136,7 @@ export default class Profile extends Component {
     if(this.state.userData.usertype){
       userType = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>User Type:</Text>
+          <Text style={{ marginRight: 10, }}>User Type:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.usertype}</Text>
         </View>
       )
@@ -145,7 +145,7 @@ export default class Profile extends Component {
     if(this.state.userData.location){
       location = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>Location Reference:</Text>
+          <Text style={{ marginRight: 10, }}>Location Reference:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.userData.location}</Text>
         </View>
       )
@@ -154,7 +154,7 @@ export default class Profile extends Component {
     if(this.state.locationState){
       locationState = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>State:</Text>
+          <Text style={{ marginRight: 10, }}>State:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.locationState}</Text>
         </View>
       )
@@ -163,7 +163,7 @@ export default class Profile extends Component {
     if(this.state.locationDistrict){
       locationDistrict = (
         <View style={{ width: "100%", marginBottom: 10, flexDirection: "row" }}>
-          <Text style={{ fontWeight: 700, marginRight: 10, }}>Distric:</Text>
+          <Text style={{ marginRight: 10, }}>Distric:</Text>
           <Text style={{ flex: 1, flexGrow: 1 }}>{this.state.locationDistrict}</Text>
         </View>
       )

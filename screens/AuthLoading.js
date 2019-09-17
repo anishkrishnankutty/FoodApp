@@ -28,6 +28,8 @@ export class AuthLoadingScreen extends React.Component {
             ).catch((error) => {
                 AsyncStorage.removeItem(USER_KEY)
             });
+        }else{
+            this.props.navigation.navigate('Auth');
         }
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
@@ -36,7 +38,7 @@ export class AuthLoadingScreen extends React.Component {
     // Render any loading content that you like here
     render() {
         return (
-        <View>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <ActivityIndicator />
             <StatusBar barStyle="default" />
         </View>
