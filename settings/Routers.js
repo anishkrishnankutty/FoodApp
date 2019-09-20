@@ -1,85 +1,150 @@
 import * as React from 'react';
-
-import {
-  createStackNavigator,
-  createAppContainer,
-  createBottomTabNavigator,
-  createSwitchNavigator,
-} from 'react-navigation';
-
-import {
-  Feather,
-  MaterialCommunityIcons,
-  MaterialIcons,
-  Entypo,
-} from '@expo/vector-icons';
+import { createStackNavigator, createSwitchNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
 
 /////////////////
 // screens
 /////////////////
+import { AuthLoadingScreen } from '../screens/AuthLoading';
 import Register from '../screens/Register';
 import Login from '../screens/Login';
 import ForgotPassword from '../screens/ForgotPassword';
+import Volunteer from '../screens/Volunteer';
+import VolunteerDetail from '../screens/VolunteerDetail';
+import Donor from '../screens/Donor';
+import Admin from '../screens/Admin';
 import Profile from '../screens/Profile';
 
-/////////////////
-// root Navigation
-/////////////////
-export const RootAppContainer = (signedIn = false) => {
-  const rootnavigation = createSwitchNavigator(
-      {
-          SignedIn: {
-              screen: SignInAppContainer,
-              navigationOptions: {
-                header: null,
-              },
-          },
-          SignedOut: {
-              screen: SignedOutAppContainer,
-              navigationOptions: {
-                header: null,
-              },
-          },
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+////// VOLUNTEER LANDING
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+export const volunteerLanding = createStackNavigator(
+  {
+    Volunteer: {
+      screen: Volunteer,
+      navigationOptions: {
+        header: null,
       },
-      {
-          initialRouteName: signedIn ? 'SignedIn' : 'SignedOut',
-      }
-  );
-  return createAppContainer(rootnavigation);
-};
+    },
+    VolunteerDetail: {
+      screen: VolunteerDetail,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Volunteer'
+  }
+);
 
 /////////////////
 // Auth Navigation
 /////////////////
-const signedOutNavigation = createStackNavigator(
+export const signedOutNavigation = createStackNavigator(
   {
     Register: {
       screen: Register,
+      navigationOptions: {
+        header: null,
+      },
     },
     Login: {
       screen: Login,
+      navigationOptions: {
+        header: null,
+      },
     },
     ForgotPassword: {
       screen: ForgotPassword,
+      navigationOptions: {
+        header: null,
+      },
     },
   },
   {
     initialRouteName: 'Register',
   }
 );
+
 /////////////////
 // InApp Navigation
 /////////////////
-const signedInNavigation = createStackNavigator(
+export const signedInNavigationDonor = createStackNavigator(
   {
+    Donor: {
+      screen: Donor,
+      navigationOptions: {
+        header: null,
+      },
+    },
     Profile: {
       screen: Profile,
+      navigationOptions: {
+        header: null,
+      },
     },
   },
   {
-    initialRouteName: 'Profile'
+    initialRouteName: 'Donor'
   }
 );
 
-export const SignedOutAppContainer = createAppContainer(signedOutNavigation);
-export const SignInAppContainer = createAppContainer(signedInNavigation);
+export const signedInNavigationVolunteer = createBottomTabNavigator(
+  {
+    Volunteer: {
+      screen: volunteerLanding,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Profile: {
+      screen: Profile,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Volunteer'
+  }
+);
+
+export const signedInNavigationAdmin = createStackNavigator(
+  {
+    Admin: {
+      screen: Admin,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Profile: {
+      screen: Profile,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Admin'
+  }
+);
+
+const AppStackDonor = signedInNavigationDonor;
+const AppStackVolunteer = signedInNavigationVolunteer;
+const AppStackAdmin = signedInNavigationAdmin;
+const AuthStack = signedOutNavigation;
+
+export const AppContainer = createAppContainer(createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    AppDonor: AppStackDonor,
+    AppVolunteer: AppStackVolunteer,
+    AppAdmin: AppStackAdmin,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+));
