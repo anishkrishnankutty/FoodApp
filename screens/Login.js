@@ -28,7 +28,7 @@ export default class Login extends Component {
             uid: details.user.uid
           }).then(() => {        
             setTimeout(()=>{
-              navigate('App');
+              navigate('AuthLoading');
             }, 1000);
           });
         }else{

@@ -12,7 +12,7 @@ const firebaseConfig = {
   authDomain: "foodapp-972b5.firebaseapp.com",
   databaseURL: "https://foodapp-972b5.firebaseio.com",
   projectId: "foodapp-972b5",
-  storageBucket: "",
+  storageBucket: "foodapp-972b5.appspot.com",
   messagingSenderId: "269797104807",
   appId: "1:269797104807:web:8effd573cec9de90"
 };

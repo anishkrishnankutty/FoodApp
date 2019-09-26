@@ -8,14 +8,13 @@ import "firebase/firestore";
 
 const ITEM_WIDTH = Dimensions.get('window').width;
 
-export default class Volunteer extends Component {
+export default class VolunteerCollected extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       data: []
     };
-    this.loadDonations = this.loadDonations.bind(this);
   }
 
   componentDidMount() {
@@ -24,16 +23,17 @@ export default class Volunteer extends Component {
 
   async loadDonations() {
     try {
-      let data = await firebase.firestore().collection('donations').where('retrieved', '==', false);
-      data.onSnapshot((querySnapshot) => {
-        let array = [];
-        querySnapshot.forEach((doc) => {
+      let array = [];
+      let data = await firebase.firestore().collection('donations').where("retrieved", "==", true).where('retrievedBy', '==', firebase.auth().currentUser.uid);
+      data = data.get();
+      data.then((response)=>{
+        response.docs.map((doc)=>{
           array.push(doc.data());
-        });
+        })
         this.setState({
           data: array
         })
-      });
+      })
     } catch(error) {
       console.log(error);
     }
@@ -44,13 +44,12 @@ export default class Volunteer extends Component {
       <View style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ width: "100%", padding: 10, borderBottomWidth: 1, borderBottomColor: "#CCC" }}>
-            <Heading fontFamily='lato-bold' fontSize={20} text="Sponsored Food" />
+            <Heading fontFamily='lato-bold' fontSize={20} text="Collected Food" />
           </View>
           <FlatList
-            numColumns={2}
             style={{ flex: 1 }}
             data={this.state.data}
-            contentContainerStyle={{ paddingLeft: 5, paddingRight: 5, paddingTop: 15 }}
+            contentContainerStyle={{ padding: 10 }}
             keyExtractor={(item, index) => 'volunteer-list-' + index.toString()}
             renderItem={(data, index) => {
               return <CardVolunteer object={data.item} navigation={this.props.navigation} key={index} itemWidth={ ITEM_WIDTH / 2 - 5 } />;

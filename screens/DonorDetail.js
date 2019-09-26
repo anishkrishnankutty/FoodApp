@@ -5,7 +5,7 @@ import Heading from '../components/Heading';
 import * as firebase from 'firebase';
 import "firebase/firestore";
 
-export default class VolunteerDetail extends Component {
+export default class DonorDetail extends Component {
 
   constructor(props) {
     super(props);

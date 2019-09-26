@@ -17,7 +17,9 @@ export class AuthLoadingScreen extends React.Component {
           uid: '',
           userData: {},
           user: {},
+          userToken: '',
       };
+      this.redirectUser = this.redirectUser.bind(this);
     }
 
     componentDidMount() {
@@ -33,6 +35,8 @@ export class AuthLoadingScreen extends React.Component {
           if(response) {
             this.setState({
               userData: response.data()
+            },()=>{
+                this.redirectUser();
             })
           }
         })
@@ -54,26 +58,30 @@ export class AuthLoadingScreen extends React.Component {
                     this.setState({
                         user: details.user
                     },()=>{
-                        this.getUser().then(()=>{
-                            if(this.state.userData.usertype === 'Admin' ) {
-                                this.props.navigation.navigate(userToken ? 'AppAdmin' : 'Auth');
-                            } else if(this.state.userData.usertype === 'Donor') {
-                                this.props.navigation.navigate(userToken ? 'AppDonor' : 'Auth');
-                            } else {
-                                this.props.navigation.navigate(userToken ? 'AppVolunteer' : 'Auth');
-                            }
-                        });
+                        this.getUser();
                     })
                 }
             ).catch((error) => {
-                AsyncStorage.removeItem(USER_KEY)
+                AsyncStorage.removeItem('user_token');
+                this.props.navigation.navigate('Auth');
             });
         }else{
+            AsyncStorage.removeItem('user_token');
             this.props.navigation.navigate('Auth');
         }
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
     };
+
+    redirectUser() {
+        if(this.state.userData.usertype === 'Admin' ) {
+            this.props.navigation.navigate('AppAdmin');
+        } else if(this.state.userData.usertype === 'Donor') {
+            this.props.navigation.navigate('AppDonor');
+        } else {
+            this.props.navigation.navigate('AppVolunteer');
+        }
+    }
 
     // Render any loading content that you like here
     render() {

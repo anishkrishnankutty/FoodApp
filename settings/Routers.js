@@ -9,8 +9,10 @@ import Register from '../screens/Register';
 import Login from '../screens/Login';
 import ForgotPassword from '../screens/ForgotPassword';
 import Volunteer from '../screens/Volunteer';
+import VolunteerCollected from '../screens/VolunteerCollected';
 import VolunteerDetail from '../screens/VolunteerDetail';
 import Donor from '../screens/Donor';
+import DonorDetail from '../screens/DonorDetail';
 import Admin from '../screens/Admin';
 import Profile from '../screens/Profile';
 
@@ -36,6 +38,31 @@ export const volunteerLanding = createStackNavigator(
   },
   {
     initialRouteName: 'Volunteer'
+  }
+);
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+////// VOLUNTEER LANDING
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+export const donorLanding = createStackNavigator(
+  {
+    Donor: {
+      screen: Donor,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    DonorDetail: {
+      screen: DonorDetail,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Donor'
   }
 );
 
@@ -71,10 +98,10 @@ export const signedOutNavigation = createStackNavigator(
 /////////////////
 // InApp Navigation
 /////////////////
-export const signedInNavigationDonor = createStackNavigator(
+export const signedInNavigationDonor = createBottomTabNavigator(
   {
     Donor: {
-      screen: Donor,
+      screen: donorLanding,
       navigationOptions: {
         header: null,
       },
@@ -96,12 +123,21 @@ export const signedInNavigationVolunteer = createBottomTabNavigator(
     Volunteer: {
       screen: volunteerLanding,
       navigationOptions: {
+        title: 'Home',
+        header: null,
+      },
+    },
+    Collected: {
+      screen: VolunteerCollected,
+      navigationOptions: {
+        title: 'Collected',
         header: null,
       },
     },
     Profile: {
       screen: Profile,
       navigationOptions: {
+        title: 'Profile',
         header: null,
       },
     },
