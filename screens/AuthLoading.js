@@ -7,10 +7,42 @@ import {
   View,
 } from 'react-native';
 import * as firebase from 'firebase';
+import "firebase/firestore";
 
 export class AuthLoadingScreen extends React.Component {
+
+    constructor(props) {
+      super(props);
+      this.state = {
+          uid: '',
+          userData: {},
+          user: {},
+          userToken: '',
+      };
+      this.redirectUser = this.redirectUser.bind(this);
+    }
+
     componentDidMount() {
         this._bootstrapAsync();
+    }
+
+    async getUser() {
+      try {
+        let array = [];
+        let data = await firebase.firestore().collection('users').doc(this.state.user.uid);
+        data = data.get();
+        data.then((response)=>{
+          if(response) {
+            this.setState({
+              userData: response.data()
+            },()=>{
+                this.redirectUser();
+            })
+          }
+        })
+      } catch(error) {
+        console.log(error);
+      }
     }
 
     // Fetch the token from storage then navigate to our appropriate place
@@ -23,17 +55,33 @@ export class AuthLoadingScreen extends React.Component {
                 jsonUser.password
             ).then(
                 async (details) => {
-                    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+                    this.setState({
+                        user: details.user
+                    },()=>{
+                        this.getUser();
+                    })
                 }
             ).catch((error) => {
-                AsyncStorage.removeItem(USER_KEY)
+                AsyncStorage.removeItem('user_token');
+                this.props.navigation.navigate('Auth');
             });
         }else{
+            AsyncStorage.removeItem('user_token');
             this.props.navigation.navigate('Auth');
         }
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
     };
+
+    redirectUser() {
+        if(this.state.userData.usertype === 'Admin' ) {
+            this.props.navigation.navigate('AppAdmin');
+        } else if(this.state.userData.usertype === 'Donor') {
+            this.props.navigation.navigate('AppDonor');
+        } else {
+            this.props.navigation.navigate('AppVolunteer');
+        }
+    }
 
     // Render any loading content that you like here
     render() {

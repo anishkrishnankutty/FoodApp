@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import * as firebase from 'firebase';
 import "firebase/firestore";
-import { SafeAreaView } from 'react-navigation';
 
 export default class Profile extends Component {
 

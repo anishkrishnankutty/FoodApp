@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
+import { AppContainer } from './settings/Routers';
 
 // begin firebase
 import * as firebase from 'firebase';
-import { AuthLoadingScreen } from './screens/AuthLoading';
 const firebaseConfig = {
   apiKey: "AIzaSyC15_R6EXK0cCt0s5aPj6YVoVlTXTH_yFc",
   authDomain: "foodapp-972b5.firebaseapp.com",
   databaseURL: "https://foodapp-972b5.firebaseio.com",
   projectId: "foodapp-972b5",
-  storageBucket: "",
+  storageBucket: "foodapp-972b5.appspot.com",
   messagingSenderId: "269797104807",
   appId: "1:269797104807:web:8effd573cec9de90"
 };
@@ -18,69 +20,60 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 // end firebase
 
-/////////////////
-// screens
-/////////////////
-import Register from './screens/Register';
-import Login from './screens/Login';
-import ForgotPassword from './screens/ForgotPassword';
-import Profile from './screens/Profile';
+export default class App extends React.Component {
 
-/////////////////
-// Auth Navigation
-/////////////////
-export const signedOutNavigation = createStackNavigator(
-  {
-    Register: {
-      screen: Register,
-      navigationOptions: {
-        header: null,
-      },
-    },
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        header: null,
-      },
-    },
-    ForgotPassword: {
-      screen: ForgotPassword,
-      navigationOptions: {
-        header: null,
-      },
-    },
-  },
-  {
-    initialRouteName: 'Register',
+  constructor(props) {
+    super(props);
+    this.state = {
+        signedIn: false,
+        isReady: false,
+    };
   }
-);
-/////////////////
-// InApp Navigation
-/////////////////
-export const signedInNavigation = createStackNavigator(
-  {
-    Profile: {
-      screen: Profile,
-      navigationOptions: {
-        header: null,
-      },
-    },
-  },
-  {
-    initialRouteName: 'Profile'
-  }
-);
 
-const AppStack = signedInNavigation;
-const AuthStack = signedOutNavigation;
+  async _cacheResourcesAsync() {
 
-export default createAppContainer(createSwitchNavigator(
-  {
-    AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack,
-  },
-  {
-    initialRouteName: 'AuthLoading',
+    const images = [
+      require('./assets/splash.png'),
+    ];
+
+    const fonts = [
+      {
+        'lato-bold': require('./assets/fonts/Lato-Bold.ttf'),
+      },
+      {
+        'lato-regular': require('./assets/fonts/Lato-Regular.ttf'),
+      },
+      {
+        'lato-light': require('./assets/fonts/Lato-Light.ttf'),
+      }
+    ];
+
+    const cacheImages = images.map((image) => {
+      return Asset.fromModule(image).downloadAsync();
+    });
+
+    const cacheFonts = fonts.map((font) => {
+      return Font.loadAsync(font);
+    });
+
+    return Promise.all([...cacheImages, ...cacheFonts])
+
   }
-));
+
+  render() {
+
+    if (!this.state.isReady) {
+      return (
+        <AppLoading
+          startAsync={this._cacheResourcesAsync}
+          onFinish={() => this.setState({ isReady: true })}
+          onError={console.warn}
+        />
+      );
+    }
+
+    return <AppContainer />;
+
+  }
+
+}
